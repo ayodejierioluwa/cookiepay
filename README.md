@@ -101,7 +101,7 @@ To test CookiePay with live $COOK tokens on Cookie Chain:
 Built for the @SuperteamEarn $1,000 USDC Bounty with @Nightly_app wallet integration. 🚀
 
 Live App: [YOUR_DEPLOYED_URL]
-GitHub: [YOUR_GITHUB_URL]
+GitHub: https://github.com/ayodejierioluwa/cookiepay
 
 2/4 Why CookiePay on Cookie Chain?
 Traditional payments suffer from slow settlement and high gas. With Cookie Chain's SVM sub-second finality and sub-cent fees:
