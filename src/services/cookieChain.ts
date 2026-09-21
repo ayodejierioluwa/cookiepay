@@ -6,6 +6,7 @@ import {
   TransactionInstruction,
   LAMPORTS_PER_SOL,
 } from '@solana/web3.js';
+import { Buffer } from 'buffer';
 
 export const COOKIE_RPC_ENDPOINT = 'https://rpc.cookiescan.io';
 export const COOKIE_EXPLORER_BASE = 'https://cookiescan.io';
