@@ -31,7 +31,7 @@ export const FortuneCookie: React.FC<FortuneCookieProps> = ({ wallet, onFortuneC
       const { transaction, fortuneText } = await createFortuneTransaction(wallet.publicKey, seed);
 
       // Sign & Submit via Nightly
-      const signature = await wallet.signAndSend(transaction);
+      const signature = await wallet.signAndSend(transaction, 0.000001);
 
       setLastSignature(signature);
       setRevealedFortune(fortuneText);

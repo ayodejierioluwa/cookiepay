@@ -32,9 +32,12 @@ export interface WalletState {
   publicKey: PublicKey | null;
   address: string | null;
   balanceCook: number;
+  realBalanceCook: number;
   isNightlyInstalled: boolean;
   connecting: boolean;
   walletName: string;
+  isDemoMode: boolean;
+  sandboxBalance: number;
 }
 
 export function useNightlyWallet() {
@@ -42,10 +45,13 @@ export function useNightlyWallet() {
     connected: false,
     publicKey: null,
     address: null,
-    balanceCook: 0,
+    balanceCook: 100,
+    realBalanceCook: 0,
     isNightlyInstalled: false,
     connecting: false,
     walletName: 'Nightly',
+    isDemoMode: true,
+    sandboxBalance: 100,
   });
 
   // Detect available provider (prioritize window.nightly.solana)
@@ -82,8 +88,16 @@ export function useNightlyWallet() {
   // Fetch balance
   const refreshBalance = useCallback(async (pubkey: PublicKey) => {
     try {
-      const balance = await getCookBalance(pubkey.toBase58());
-      setWalletState(prev => ({ ...prev, balanceCook: balance }));
+      const realBalance = await getCookBalance(pubkey.toBase58());
+      setWalletState(prev => {
+        const nextIsDemo = prev.isDemoMode || realBalance === 0;
+        return {
+          ...prev,
+          realBalanceCook: realBalance,
+          isDemoMode: nextIsDemo,
+          balanceCook: nextIsDemo ? prev.sandboxBalance : realBalance,
+        };
+      });
     } catch (err) {
       console.error('Balance refresh error:', err);
     }
@@ -141,18 +155,68 @@ export function useNightlyWallet() {
       connected: false,
       publicKey: null,
       address: null,
-      balanceCook: 0,
+      balanceCook: prev.isDemoMode ? prev.sandboxBalance : 0,
+      realBalanceCook: 0,
     }));
   }, [getProvider]);
 
+  // Toggle Sandbox Mode
+  const setDemoMode = useCallback((enabled: boolean) => {
+    setWalletState(prev => ({
+      ...prev,
+      isDemoMode: enabled,
+      balanceCook: enabled ? prev.sandboxBalance : prev.realBalanceCook,
+    }));
+  }, []);
+
+  // Reset Sandbox Balance
+  const resetSandboxBalance = useCallback(() => {
+    setWalletState(prev => ({
+      ...prev,
+      sandboxBalance: 100,
+      balanceCook: prev.isDemoMode ? 100 : prev.realBalanceCook,
+    }));
+  }, []);
+
   // Sign and submit transaction
-  const signAndSend = useCallback(async (transaction: Transaction): Promise<string> => {
+  const signAndSend = useCallback(async (transaction: Transaction, amountToDeduct: number = 0): Promise<string> => {
     const providerInfo = getProvider();
     if (!providerInfo || !walletState.publicKey) {
       throw new Error('Wallet not connected');
     }
 
-    // Try signAndSendTransaction first
+    // Demo Sandbox Mode: Attempt real Nightly prompt, then simulate sub-second Cookie Chain block
+    if (walletState.isDemoMode) {
+      try {
+        if (providerInfo.provider.signTransaction) {
+          await providerInfo.provider.signTransaction(transaction);
+        }
+      } catch (signErr) {
+        console.log('Demo Sandbox: auto-simulating after wallet prompt', signErr);
+      }
+
+      // Sub-second simulated finality (350ms)
+      await new Promise(resolve => setTimeout(resolve, 350));
+
+      // Realistic 88-char base58 transaction signature
+      const chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+      const signature = Array.from({ length: 88 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+
+      if (amountToDeduct > 0) {
+        setWalletState(prev => {
+          const nextBal = Math.max(0, parseFloat((prev.sandboxBalance - amountToDeduct).toFixed(6)));
+          return {
+            ...prev,
+            sandboxBalance: nextBal,
+            balanceCook: nextBal,
+          };
+        });
+      }
+
+      return signature;
+    }
+
+    // Live execution
     if (providerInfo.provider.signAndSendTransaction) {
       const res = await providerInfo.provider.signAndSendTransaction(transaction);
       if (res && res.signature) {
@@ -175,7 +239,7 @@ export function useNightlyWallet() {
     }
 
     throw new Error('Wallet does not support transaction signing');
-  }, [getProvider, walletState.publicKey, refreshBalance]);
+  }, [getProvider, walletState.publicKey, walletState.isDemoMode, refreshBalance]);
 
   return {
     ...walletState,
@@ -183,5 +247,7 @@ export function useNightlyWallet() {
     disconnect,
     refreshBalance,
     signAndSend,
+    setDemoMode,
+    resetSandboxBalance,
   };
 }

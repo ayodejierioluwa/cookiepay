@@ -37,11 +37,32 @@ export const Navbar: React.FC<NavbarProps> = ({ wallet, onOpenQuickstart }) => {
       </a>
 
       {/* Network Status & Bridge Quickstart */}
+      {/* Network Status & Mode Toggle */}
       <div className="nav-center">
         <div className="network-pill" title="Live connection to https://rpc.cookiescan.io">
           <span className="network-dot"></span>
           <span>Cookie Chain SVM</span>
         </div>
+
+        {/* Mode Toggle Button */}
+        <button
+          type="button"
+          onClick={() => wallet.setDemoMode(!wallet.isDemoMode)}
+          className={`mode-toggle-btn ${wallet.isDemoMode ? 'sandbox-active' : 'live-active'}`}
+          title={wallet.isDemoMode ? "Currently in Demo Sandbox (100 COOK). Click to switch to Live Mode." : "Currently in Live Mode. Click to switch to Demo Sandbox."}
+        >
+          {wallet.isDemoMode ? (
+            <>
+              <span className="mode-badge-dot sandbox"></span>
+              <span>🧪 Demo Sandbox</span>
+            </>
+          ) : (
+            <>
+              <span className="mode-badge-dot live"></span>
+              <span>🟢 Live Network</span>
+            </>
+          )}
+        </button>
 
         <button
           type="button"
@@ -58,8 +79,12 @@ export const Navbar: React.FC<NavbarProps> = ({ wallet, onOpenQuickstart }) => {
       <div className="nav-actions">
         {wallet.connected && wallet.address ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <div className="wallet-balance-pill">
-              {wallet.balanceCook.toFixed(4)} COOK
+            <div
+              className={`wallet-balance-pill ${wallet.isDemoMode ? 'sandbox-pill' : ''}`}
+              title={wallet.isDemoMode ? "Demo Sandbox Balance (deducts on tips & fortunes)" : "Live on-chain COOK balance"}
+            >
+              <span>{wallet.balanceCook.toFixed(4)} COOK</span>
+              {wallet.isDemoMode && <span className="demo-tag">Sandbox</span>}
             </div>
             
             <button

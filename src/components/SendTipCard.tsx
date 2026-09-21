@@ -64,14 +64,14 @@ export const SendTipCard: React.FC<SendTipCardProps> = ({
       return;
     }
 
-    if (wallet.balanceCook > 0 && numericAmount > wallet.balanceCook) {
+    if (!wallet.isDemoMode && wallet.balanceCook > 0 && numericAmount > wallet.balanceCook) {
       setErrorMessage(`Insufficient $COOK balance. You have ${wallet.balanceCook.toFixed(4)} COOK.`);
       return;
     }
 
     try {
       setLoading(true);
-      setStatusText('Building transaction...');
+      setStatusText(wallet.isDemoMode ? 'Preparing sandbox transaction...' : 'Building transaction...');
 
       const toPubkey = new PublicKey(trimmedRecipient);
       const tx = await createTransferTransaction(
@@ -81,10 +81,10 @@ export const SendTipCard: React.FC<SendTipCardProps> = ({
         memo
       );
 
-      setStatusText('Approve transaction in Nightly...');
-      const signature = await wallet.signAndSend(tx);
+      setStatusText(wallet.isDemoMode ? 'Confirming in Nightly Sandbox...' : 'Approve transaction in Nightly...');
+      const signature = await wallet.signAndSend(tx, numericAmount);
 
-      setStatusText('Confirmed on Cookie Chain!');
+      setStatusText(wallet.isDemoMode ? 'Confirmed on Cookie Chain (Sandbox)!' : 'Confirmed on Cookie Chain!');
       setSuccessTx(signature);
 
       // Trigger celebratory confetti
@@ -134,6 +134,24 @@ export const SendTipCard: React.FC<SendTipCardProps> = ({
           </p>
         </div>
       </div>
+
+      {wallet.isDemoMode && (
+        <div className="sandbox-info-banner">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+            <Sparkles size={15} color="var(--cookie-gold)" />
+            <span style={{ fontWeight: 600, color: 'var(--cookie-gold)' }}>Demo Sandbox Active:</span>
+            <span>Testing with 100 COOK demo balance & zero real gas fees.</span>
+          </div>
+          <button
+            type="button"
+            className="btn-text-refill"
+            onClick={wallet.resetSandboxBalance}
+            title="Reset sandbox balance back to 100 COOK"
+          >
+            Refill (100 COOK)
+          </button>
+        </div>
+      )}
 
       <form onSubmit={handleSend}>
         {/* Recipient Address */}
