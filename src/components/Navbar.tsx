@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Wallet, Check, Copy, ExternalLink, Compass, LogOut, Sparkles } from 'lucide-react';
+import { Wallet, Check, Copy, ExternalLink, Compass, LogOut } from 'lucide-react';
 import { useNightlyWallet } from '../hooks/useNightlyWallet';
 import { getExplorerAccountUrl } from '../services/cookieChain';
 
@@ -36,33 +36,23 @@ export const Navbar: React.FC<NavbarProps> = ({ wallet, onOpenQuickstart }) => {
         </div>
       </a>
 
-      {/* Nav Center: Network & Mode Pill Cluster */}
+      {/* Nav Center: Unified Network & Mode Switch + Guide */}
       <div className="nav-center">
-        <div className="nav-pill-cluster">
-          <div className="network-pill" title="Live connection to https://rpc.cookiescan.io">
-            <span className="network-dot"></span>
-            <span>Cookie Chain</span>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => wallet.setDemoMode(!wallet.isDemoMode)}
-            className={`mode-toggle-btn ${wallet.isDemoMode ? 'sandbox-active' : 'live-active'}`}
-            title={wallet.isDemoMode ? "In Demo Sandbox (100 COOK). Click to switch to Live Mode." : "In Live Mode. Click to switch to Demo Sandbox."}
-          >
-            {wallet.isDemoMode ? (
-              <>
-                <Sparkles size={13} color="var(--cookie-gold)" />
-                <span>Sandbox (100 COOK)</span>
-              </>
-            ) : (
-              <>
-                <span className="mode-badge-dot live"></span>
-                <span>Live Mode</span>
-              </>
-            )}
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => wallet.setDemoMode(!wallet.isDemoMode)}
+          className={`nav-status-pill ${wallet.isDemoMode ? 'sandbox' : 'live'}`}
+          title={wallet.isDemoMode ? "In Sandbox Mode. Click to switch to Live." : "In Live Mode. Click to switch to Sandbox."}
+        >
+          <span className="network-dot"></span>
+          <span>Cookie Chain</span>
+          <span className="status-separator">•</span>
+          {wallet.isDemoMode ? (
+            <span className="status-mode-label sandbox">🧪 Sandbox</span>
+          ) : (
+            <span className="status-mode-label live">Live</span>
+          )}
+        </button>
 
         <button
           type="button"
@@ -70,8 +60,8 @@ export const Navbar: React.FC<NavbarProps> = ({ wallet, onOpenQuickstart }) => {
           className="btn-quickstart-nav"
           title="Open Cookie Chain onboarding & bridge guide"
         >
-          <Compass size={14} color="var(--cookie-gold)" />
-          <span>Bridge & Guide</span>
+          <Compass size={13} color="var(--cookie-gold)" />
+          <span>Guide</span>
         </button>
       </div>
 
@@ -81,11 +71,10 @@ export const Navbar: React.FC<NavbarProps> = ({ wallet, onOpenQuickstart }) => {
           <div className="wallet-connected-capsule">
             <div
               className={`capsule-balance ${wallet.isDemoMode ? 'sandbox-bal' : ''}`}
-              title={wallet.isDemoMode ? "Demo Sandbox Balance (deducts on tips & fortunes)" : "Live on-chain COOK balance"}
+              title={wallet.isDemoMode ? "Sandbox Balance (deducts on tips & fortunes)" : "Live on-chain COOK balance"}
             >
               <span className="balance-val">{wallet.balanceCook.toFixed(2)}</span>
               <span className="balance-unit">COOK</span>
-              {wallet.isDemoMode && <span className="capsule-demo-tag">Demo</span>}
             </div>
 
             <button
@@ -93,7 +82,7 @@ export const Navbar: React.FC<NavbarProps> = ({ wallet, onOpenQuickstart }) => {
               className="capsule-address-btn"
               title="Click to copy address"
             >
-              {copied ? <Check size={13} color="var(--neon-emerald)" /> : <Copy size={13} />}
+              {copied ? <Check size={12} color="var(--neon-emerald)" /> : <Copy size={12} />}
               <span>{truncateAddress(wallet.address)}</span>
             </button>
 

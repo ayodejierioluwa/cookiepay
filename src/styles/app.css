@@ -84,34 +84,48 @@
   font-weight: 700;
 }
 
-/* Nav Center: Cluster */
+/* Nav Center: Unified Status Pill */
 .nav-center {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
 }
 
-.nav-pill-cluster {
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 9999px;
-  padding: 0.2rem;
-  gap: 0.25rem;
-}
-
-.network-pill {
-  display: flex;
+.nav-status-pill {
+  display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.35rem 0.75rem;
+  padding: 0.38rem 0.85rem;
   border-radius: 9999px;
-  background: rgba(16, 185, 129, 0.08);
   font-size: 0.78rem;
   font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+}
+
+.nav-status-pill:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.status-separator {
+  color: var(--text-muted);
+  opacity: 0.4;
+  font-size: 0.75rem;
+}
+
+.status-mode-label.sandbox {
+  color: var(--cookie-gold);
+  font-weight: 700;
+}
+
+.status-mode-label.live {
   color: var(--neon-emerald);
-  font-family: var(--font-mono);
+  font-weight: 700;
 }
 
 .network-dot {
@@ -128,64 +142,11 @@
   50% { opacity: 0.4; transform: scale(0.85); }
 }
 
-/* Mode Toggle Button */
-.mode-toggle-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition-normal);
-  border: 1px solid transparent;
-  font-family: var(--font-sans);
-}
-
-.mode-toggle-btn.sandbox-active {
-  background: rgba(245, 158, 11, 0.12);
-  border-color: rgba(245, 158, 11, 0.35);
-  color: var(--cookie-gold);
-}
-
-.mode-toggle-btn.sandbox-active:hover {
-  background: rgba(245, 158, 11, 0.2);
-  border-color: var(--cookie-gold);
-}
-
-.mode-toggle-btn.live-active {
-  background: rgba(16, 185, 129, 0.08);
-  border-color: rgba(16, 185, 129, 0.25);
-  color: var(--neon-emerald);
-}
-
-.mode-toggle-btn.live-active:hover {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: var(--neon-emerald);
-}
-
-.mode-badge-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-}
-
-.mode-badge-dot.sandbox {
-  background: var(--cookie-gold);
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
-}
-
-.mode-badge-dot.live {
-  background: var(--neon-emerald);
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
-}
-
 .btn-quickstart-nav {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.4rem 0.85rem;
+  gap: 0.4rem;
+  padding: 0.38rem 0.75rem;
   border-radius: 9999px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -205,7 +166,8 @@
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 /* Connect Wallet Button */
@@ -236,11 +198,11 @@
 .wallet-connected-capsule {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 12px;
-  padding: 0.2rem 0.25rem;
-  gap: 0.3rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0.18rem 0.25rem;
+  gap: 0.25rem;
   box-shadow: var(--shadow-sm);
   transition: border-color 0.2s ease;
 }
@@ -252,44 +214,33 @@
 .capsule-balance {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.3rem 0.65rem;
+  gap: 0.25rem;
+  padding: 0.28rem 0.55rem;
   background: rgba(245, 158, 11, 0.09);
-  border: 1px solid rgba(245, 158, 11, 0.2);
-  border-radius: 8px;
+  border: 1px solid rgba(245, 158, 11, 0.18);
+  border-radius: 6px;
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--cookie-gold);
 }
 
 .capsule-balance .balance-unit {
-  font-size: 0.7rem;
-  opacity: 0.8;
-}
-
-.capsule-demo-tag {
-  font-size: 0.62rem;
-  padding: 0.08rem 0.3rem;
-  background: rgba(245, 158, 11, 0.25);
-  color: #fbbf24;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 700;
+  font-size: 0.68rem;
+  opacity: 0.75;
 }
 
 .capsule-address-btn {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.35rem 0.6rem;
+  gap: 0.35rem;
+  padding: 0.28rem 0.5rem;
   background: transparent;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: 6px;
   color: var(--text-primary);
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -304,8 +255,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 6px;
   background: transparent;
   border: none;
