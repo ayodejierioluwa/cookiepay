@@ -185,17 +185,9 @@ export function useNightlyWallet() {
       throw new Error('Wallet not connected');
     }
 
-    // Demo Sandbox Mode: Attempt real Nightly prompt, then simulate sub-second Cookie Chain block
+    // Demo Sandbox Mode: Fast sub-second simulated finality without triggering Nightly 0-balance simulation error
     if (walletState.isDemoMode) {
-      try {
-        if (providerInfo.provider.signTransaction) {
-          await providerInfo.provider.signTransaction(transaction);
-        }
-      } catch (signErr) {
-        console.log('Demo Sandbox: auto-simulating after wallet prompt', signErr);
-      }
-
-      // Sub-second simulated finality (350ms)
+      // Realistic sub-second confirmation delay (350ms)
       await new Promise(resolve => setTimeout(resolve, 350));
 
       // Realistic 88-char base58 transaction signature
