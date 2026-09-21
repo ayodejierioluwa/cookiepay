@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Coffee, Sparkles, ExternalLink, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Send, Coffee, Sparkles, ExternalLink, CheckCircle2, AlertCircle, Compass, Zap } from 'lucide-react';
 import { PublicKey } from '@solana/web3.js';
 import confetti from 'canvas-confetti';
 import { useNightlyWallet } from '../hooks/useNightlyWallet';
@@ -7,12 +7,14 @@ import {
   createTransferTransaction,
   isValidPublicKey,
   getExplorerTxUrl,
+  DEMO_RECIPIENTS,
 } from '../services/cookieChain';
 import type { TransactionRecord } from '../services/cookieChain';
 
 interface SendTipCardProps {
   wallet: ReturnType<typeof useNightlyWallet>;
   onTransactionSuccess: (tx: TransactionRecord) => void;
+  onOpenQuickstart?: () => void;
   prefilledTo?: string;
   prefilledAmount?: number;
   prefilledMemo?: string;
@@ -21,6 +23,7 @@ interface SendTipCardProps {
 export const SendTipCard: React.FC<SendTipCardProps> = ({
   wallet,
   onTransactionSuccess,
+  onOpenQuickstart,
   prefilledTo = '',
   prefilledAmount,
   prefilledMemo = '',
@@ -159,6 +162,38 @@ export const SendTipCard: React.FC<SendTipCardProps> = ({
               required
             />
           </div>
+
+          {/* Quick Demo Recipient Chips */}
+          <div className="recipient-chips-row">
+            <span className="chips-label">Quick Test:</span>
+            {wallet.connected && wallet.address && (
+              <button
+                type="button"
+                className={`chip-btn ${recipient === wallet.address ? 'active' : ''}`}
+                onClick={() => {
+                  setRecipient(wallet.address || '');
+                  setMemo('Loopback test on Cookie Chain');
+                }}
+              >
+                👤 Self
+              </button>
+            )}
+            {DEMO_RECIPIENTS.map((demo) => (
+              <button
+                key={demo.id}
+                type="button"
+                className={`chip-btn ${recipient === demo.address ? 'active' : ''}`}
+                onClick={() => {
+                  setRecipient(demo.address);
+                  setAmount(demo.defaultAmount);
+                  setMemo(demo.defaultMemo);
+                }}
+                title={`Set recipient to ${demo.name}`}
+              >
+                {demo.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Amount Input */}
@@ -221,6 +256,26 @@ export const SendTipCard: React.FC<SendTipCardProps> = ({
             />
           </div>
         </div>
+
+        {/* Zero or Low Balance Help Banner */}
+        {wallet.connected && wallet.balanceCook < 0.0001 && (
+          <div className="zero-balance-banner">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+              <Zap size={15} color="var(--cookie-gold)" />
+              <span>Need $COOK gas to test transactions?</span>
+            </div>
+            {onOpenQuickstart && (
+              <button
+                type="button"
+                onClick={onOpenQuickstart}
+                className="bridge-link-btn"
+              >
+                <span>Bridge & Faucet Guide</span>
+                <Compass size={12} />
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Error Alert */}
         {errorMessage && (

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Wallet, Check, Copy, ExternalLink } from 'lucide-react';
+import { Wallet, Check, Copy, ExternalLink, Compass } from 'lucide-react';
 import { useNightlyWallet } from '../hooks/useNightlyWallet';
 import { getExplorerAccountUrl } from '../services/cookieChain';
 
 interface NavbarProps {
   wallet: ReturnType<typeof useNightlyWallet>;
+  onOpenQuickstart: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ wallet }) => {
+export const Navbar: React.FC<NavbarProps> = ({ wallet, onOpenQuickstart }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -35,12 +36,22 @@ export const Navbar: React.FC<NavbarProps> = ({ wallet }) => {
         </div>
       </a>
 
-      {/* Network Status */}
+      {/* Network Status & Bridge Quickstart */}
       <div className="nav-center">
         <div className="network-pill" title="Live connection to https://rpc.cookiescan.io">
           <span className="network-dot"></span>
           <span>Cookie Chain SVM</span>
         </div>
+
+        <button
+          type="button"
+          onClick={onOpenQuickstart}
+          className="btn-quickstart-nav"
+          title="Open Cookie Chain onboarding & bridge guide"
+        >
+          <Compass size={14} color="var(--cookie-gold)" />
+          <span>Bridge & Guide</span>
+        </button>
       </div>
 
       {/* Wallet Actions */}

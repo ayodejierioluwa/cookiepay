@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Send, QrCode, Cookie, Sparkles, Layers, ExternalLink } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { NetworkStatsRadar } from './components/NetworkStatsRadar';
+import { DasAssetInspector } from './components/DasAssetInspector';
+import { QuickstartModal } from './components/QuickstartModal';
 import { SendTipCard } from './components/SendTipCard';
 import { InvoiceGenerator } from './components/InvoiceGenerator';
 import { FortuneCookie } from './components/FortuneCookie';
@@ -14,6 +16,7 @@ export const App: React.FC = () => {
   const wallet = useNightlyWallet();
   const [activeTab, setActiveTab] = useState<'tip' | 'invoice' | 'fortune' | 'all'>('tip');
   const [transactions, setTransactions] = useState<TransactionRecord[]>([]);
+  const [showQuickstart, setShowQuickstart] = useState(false);
 
   // Prefill state from URL query parameters (e.g. ?to=...&amount=...&memo=...)
   const [prefilledTo, setPrefilledTo] = useState('');
@@ -66,8 +69,8 @@ export const App: React.FC = () => {
 
   return (
     <div className="app-container">
-      {/* Top Navbar with Nightly Connector */}
-      <Navbar wallet={wallet} />
+      {/* Top Navbar with Nightly Connector & Quickstart */}
+      <Navbar wallet={wallet} onOpenQuickstart={() => setShowQuickstart(true)} />
 
       {/* Hero Header */}
       <section className="hero-section">
@@ -84,6 +87,9 @@ export const App: React.FC = () => {
 
         {/* Live Network Radar Bar */}
         <NetworkStatsRadar />
+
+        {/* Cookie DAS API & Ecosystem Status */}
+        <DasAssetInspector wallet={wallet} />
       </section>
 
       {/* Navigation Tabs */}
@@ -124,6 +130,7 @@ export const App: React.FC = () => {
           <SendTipCard
             wallet={wallet}
             onTransactionSuccess={handleTransactionSuccess}
+            onOpenQuickstart={() => setShowQuickstart(true)}
             prefilledTo={prefilledTo}
             prefilledAmount={prefilledAmount}
             prefilledMemo={prefilledMemo}
@@ -149,6 +156,7 @@ export const App: React.FC = () => {
             <SendTipCard
               wallet={wallet}
               onTransactionSuccess={handleTransactionSuccess}
+              onOpenQuickstart={() => setShowQuickstart(true)}
               prefilledTo={prefilledTo}
               prefilledAmount={prefilledAmount}
               prefilledMemo={prefilledMemo}
@@ -218,6 +226,18 @@ export const App: React.FC = () => {
           </a>
         </div>
       </footer>
+
+      {/* Quickstart & Bridge Guide Modal */}
+      <QuickstartModal
+        isOpen={showQuickstart}
+        onClose={() => setShowQuickstart(false)}
+        onSelectTestAddress={(to, memo, amount) => {
+          setPrefilledTo(to);
+          setPrefilledMemo(memo);
+          setPrefilledAmount(parseFloat(amount));
+          setActiveTab('tip');
+        }}
+      />
     </div>
   );
 };

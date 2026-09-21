@@ -42,7 +42,14 @@ Cookie Chain's sub-second finality and sub-cent fees make traditional Web2 payme
    * Live telemetry pinging `https://rpc.cookiescan.io`.
    * Displays Slot Height, RPC Latency (ms), Average Network Fee (< 0.00001 COOK), and estimated gas savings vs Ethereum L1 ($4.85+ saved per tx).
 
-6. **📜 Session Transaction Ledger**:
+6. **🗄️ Cookie DAS API (Digital Asset Standard) & Ecosystem Integration**:
+   * Live query layer connected to `https://api.cookiescan.io` using JSON-RPC `getAssetsByOwner`.
+   * Real-time compressed asset inspector and one-click shortcuts to **Cookieswap** (`https://swap.cookiechain.wtf`).
+
+7. **🌉 In-App Quickstart & Bridge Guide**:
+   * Complete onboarding modal for judges and users: Nightly configuration parameters, bridging instructions, and zero-friction test presets (Loopback Self-test, Community Treasury).
+
+8. **📜 Session Transaction Ledger**:
    * Instant local history of all payments, tips, and fortunes with direct links to `https://cookiescan.io/tx/{signature}`.
 
 ---

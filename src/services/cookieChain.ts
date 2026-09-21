@@ -9,6 +9,10 @@ import {
 
 export const COOKIE_RPC_ENDPOINT = 'https://rpc.cookiescan.io';
 export const COOKIE_EXPLORER_BASE = 'https://cookiescan.io';
+export const COOKIE_DAS_ENDPOINT = 'https://api.cookiescan.io';
+export const COOKIESWAP_URL = 'https://swap.cookiechain.wtf';
+export const COOKIE_DOCS_URL = 'https://docs.cookiechain.wtf';
+export const COOKIE_TELEGRAM_URL = 'https://t.me/TheCookieNetChain';
 export const MEMO_PROGRAM_ID = new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr');
 
 // Create connection instance
@@ -195,3 +199,108 @@ export function isValidPublicKey(address: string): boolean {
     return false;
   }
 }
+
+export interface DasAssetItem {
+  id: string;
+  interface?: string;
+  content?: {
+    metadata?: {
+      name?: string;
+      symbol?: string;
+      description?: string;
+    };
+    links?: {
+      image?: string;
+    };
+  };
+}
+
+export interface DasAssetResult {
+  operational: boolean;
+  total: number;
+  items: DasAssetItem[];
+  error?: string;
+}
+
+/**
+ * Query Cookie DAS API (Digital Asset Standard) at https://api.cookiescan.io
+ */
+export async function fetchDasAssets(ownerAddress: string): Promise<DasAssetResult> {
+  try {
+    const response = await fetch(COOKIE_DAS_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        id: 'cookiepay-das',
+        method: 'getAssetsByOwner',
+        params: {
+          ownerAddress,
+          page: 1,
+          limit: 10,
+        },
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`DAS HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    if (data.error) {
+      throw new Error(data.error.message || 'DAS RPC Error');
+    }
+
+    const result = data.result || { total: 0, items: [] };
+    return {
+      operational: true,
+      total: result.total || 0,
+      items: result.items || [],
+    };
+  } catch (err: unknown) {
+    console.warn('DAS query failed:', err);
+    return {
+      operational: false,
+      total: 0,
+      items: [],
+      error: err instanceof Error ? err.message : 'DAS Service unavailable',
+    };
+  }
+}
+
+export interface DemoRecipient {
+  id: string;
+  name: string;
+  label: string;
+  address: string;
+  defaultAmount: string;
+  defaultMemo: string;
+}
+
+export const DEMO_RECIPIENTS: DemoRecipient[] = [
+  {
+    id: 'treasury',
+    name: 'Cookie Ecosystem Treasury',
+    label: '🏛️ Treasury',
+    address: '11111111111111111111111111111111',
+    defaultAmount: '1',
+    defaultMemo: 'Supporting Cookie Chain ecosystem growth & public goods',
+  },
+  {
+    id: 'coffee',
+    name: 'Coffee for Creator',
+    label: '☕ Buy Coffee',
+    address: '11111111111111111111111111111111',
+    defaultAmount: '5',
+    defaultMemo: 'A hot coffee tip powered by Cookie Chain SVM ☕🍪',
+  },
+  {
+    id: 'bounty',
+    name: 'Superteam Builder Tip',
+    label: '🚀 Builder Pool',
+    address: '11111111111111111111111111111111',
+    defaultAmount: '10',
+    defaultMemo: 'CookiePay Superteam Earn bounty tip on Cookie Chain',
+  },
+];
+
