@@ -15,21 +15,27 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem 0;
-  border-bottom: 1px solid var(--border-subtle);
+  padding: 0.85rem 1.5rem;
+  margin: 0.75rem 0 1rem 0;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   position: sticky;
-  top: 0;
+  top: 0.75rem;
   z-index: 50;
-  backdrop-filter: blur(20px);
-  background: rgba(7, 9, 14, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  background: rgba(11, 15, 22, 0.85);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s ease;
 }
 
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 0.75rem;
   text-decoration: none;
   color: var(--text-primary);
+  flex-shrink: 0;
 }
 
 .brand-icon-wrapper {
@@ -37,13 +43,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.05));
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(251, 191, 36, 0.08));
   border: 1px solid var(--cookie-border);
   box-shadow: var(--shadow-glow);
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   animation: pulseGlow 3s infinite ease-in-out;
 }
 
@@ -54,7 +60,7 @@
 
 .brand-title {
   font-family: var(--font-heading);
-  font-size: 1.45rem;
+  font-size: 1.35rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   background: linear-gradient(to right, #ffffff, var(--cookie-gold));
@@ -62,44 +68,55 @@
   -webkit-text-fill-color: transparent;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
 }
 
 .brand-badge {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
-  padding: 0.2rem 0.5rem;
+  font-size: 0.6rem;
+  padding: 0.15rem 0.45rem;
   border-radius: 9999px;
   background: var(--cookie-subtle);
   color: var(--cookie-gold);
   border: 1px solid var(--cookie-border);
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  font-weight: 700;
 }
 
+/* Nav Center: Cluster */
 .nav-center {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
+}
+
+.nav-pill-cluster {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 9999px;
+  padding: 0.2rem;
+  gap: 0.25rem;
 }
 
 .network-pill {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.4rem 0.85rem;
+  gap: 0.45rem;
+  padding: 0.35rem 0.75rem;
   border-radius: 9999px;
   background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-size: 0.78rem;
+  font-weight: 600;
   color: var(--neon-emerald);
   font-family: var(--font-mono);
 }
 
 .network-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background-color: var(--neon-emerald);
   box-shadow: 0 0 8px var(--neon-emerald);
@@ -111,82 +128,11 @@
   50% { opacity: 0.4; transform: scale(0.85); }
 }
 
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-/* Connect Wallet Button */
-.btn-wallet {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.65rem 1.25rem;
-  border-radius: 10px;
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  border: 1px solid var(--cookie-border);
-  background: linear-gradient(135deg, var(--cookie-amber), #d97706);
-  color: #000;
-  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
-}
-
-.btn-wallet:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
-  filter: brightness(1.08);
-}
-
-.btn-wallet.connected {
-  background: var(--bg-card);
-  border: 1px solid var(--border-glass);
-  color: var(--text-primary);
-  box-shadow: var(--shadow-sm);
-}
-
-.btn-wallet.connected:hover {
-  border-color: var(--cookie-border);
-  background: var(--bg-card-hover);
-}
-
-.wallet-balance-pill {
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  color: var(--cookie-gold);
-  background: var(--cookie-subtle);
-  padding: 0.2rem 0.55rem;
-  border-radius: 6px;
-  border: 1px solid var(--cookie-border);
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.wallet-balance-pill.sandbox-pill {
-  border-color: rgba(245, 158, 11, 0.4);
-  background: rgba(245, 158, 11, 0.12);
-}
-
-.demo-tag {
-  font-size: 0.65rem;
-  background: rgba(245, 158, 11, 0.25);
-  color: #fbbf24;
-  padding: 0.1rem 0.35rem;
-  border-radius: 4px;
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-}
-
 /* Mode Toggle Button */
 .mode-toggle-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.4rem;
   padding: 0.35rem 0.75rem;
   border-radius: 9999px;
   font-size: 0.78rem;
@@ -194,6 +140,7 @@
   cursor: pointer;
   transition: all var(--transition-normal);
   border: 1px solid transparent;
+  font-family: var(--font-sans);
 }
 
 .mode-toggle-btn.sandbox-active {
@@ -219,8 +166,8 @@
 }
 
 .mode-badge-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
 }
 
@@ -232,6 +179,150 @@
 .mode-badge-dot.live {
   background: var(--neon-emerald);
   box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+.btn-quickstart-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-quickstart-nav:hover {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: var(--cookie-border);
+  color: var(--cookie-gold);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Connect Wallet Button */
+.btn-wallet {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: 10px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1px solid var(--cookie-border);
+  background: linear-gradient(135deg, var(--cookie-amber), #d97706);
+  color: #000;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+}
+
+.btn-wallet:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
+  filter: brightness(1.08);
+}
+
+/* Wallet Connected Capsule (Segmented Luxury Pill) */
+.wallet-connected-capsule {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 12px;
+  padding: 0.2rem 0.25rem;
+  gap: 0.3rem;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s ease;
+}
+
+.wallet-connected-capsule:hover {
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.capsule-balance {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem;
+  background: rgba(245, 158, 11, 0.09);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cookie-gold);
+}
+
+.capsule-balance .balance-unit {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.capsule-demo-tag {
+  font-size: 0.62rem;
+  padding: 0.08rem 0.3rem;
+  background: rgba(245, 158, 11, 0.25);
+  color: #fbbf24;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.capsule-address-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.6rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.capsule-address-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--cookie-gold);
+}
+
+.capsule-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.capsule-action-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.capsule-action-btn.disconnect:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.12);
 }
 
 /* Sandbox Info Banner */
@@ -270,31 +361,33 @@
 /* Hero Section */
 .hero-section {
   text-align: center;
-  padding: 2.5rem 1rem 1rem 1rem;
+  padding: 2.5rem 1rem 1.5rem 1rem;
   position: relative;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
 .hero-tag {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.35rem 0.9rem;
+  padding: 0.35rem 0.95rem;
   border-radius: 9999px;
   background: var(--cookie-subtle);
   border: 1px solid var(--cookie-border);
   color: var(--cookie-gold);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   letter-spacing: 0.02em;
 }
 
 .hero-title {
   font-family: var(--font-heading);
-  font-size: 3rem;
+  font-size: 2.85rem;
   font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
+  letter-spacing: -0.025em;
+  line-height: 1.18;
   margin-bottom: 1rem;
 }
 
@@ -306,9 +399,9 @@
 
 .hero-subtitle {
   color: var(--text-secondary);
-  font-size: 1.125rem;
-  max-width: 620px;
-  margin: 0 auto 1.5rem auto;
+  font-size: 1.05rem;
+  max-width: 600px;
+  margin: 0 auto 2.25rem auto;
   line-height: 1.6;
 }
 
@@ -316,8 +409,8 @@
 .radar-bar {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.85rem;
+  margin-top: 0.5rem;
 }
 
 .radar-stat-card {
@@ -857,6 +950,17 @@
 
 /* Responsive */
 @media (max-width: 900px) {
+  .navbar {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+  }
+  .nav-center {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.25rem;
+  }
   .radar-bar {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -864,7 +968,7 @@
     grid-template-columns: 1fr;
   }
   .hero-title {
-    font-size: 2.25rem;
+    font-size: 2.2rem;
   }
 }
 

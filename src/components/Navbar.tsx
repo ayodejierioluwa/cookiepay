@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Wallet, Check, Copy, ExternalLink, Compass } from 'lucide-react';
+import { Wallet, Check, Copy, ExternalLink, Compass, LogOut, Sparkles } from 'lucide-react';
 import { useNightlyWallet } from '../hooks/useNightlyWallet';
 import { getExplorerAccountUrl } from '../services/cookieChain';
 
@@ -32,37 +32,37 @@ export const Navbar: React.FC<NavbarProps> = ({ wallet, onOpenQuickstart }) => {
         </div>
         <div className="brand-title">
           CookiePay
-          <span className="brand-badge">SVM cApp</span>
+          <span className="brand-badge">SVM</span>
         </div>
       </a>
 
-      {/* Network Status & Bridge Quickstart */}
-      {/* Network Status & Mode Toggle */}
+      {/* Nav Center: Network & Mode Pill Cluster */}
       <div className="nav-center">
-        <div className="network-pill" title="Live connection to https://rpc.cookiescan.io">
-          <span className="network-dot"></span>
-          <span>Cookie Chain SVM</span>
-        </div>
+        <div className="nav-pill-cluster">
+          <div className="network-pill" title="Live connection to https://rpc.cookiescan.io">
+            <span className="network-dot"></span>
+            <span>Cookie Chain</span>
+          </div>
 
-        {/* Mode Toggle Button */}
-        <button
-          type="button"
-          onClick={() => wallet.setDemoMode(!wallet.isDemoMode)}
-          className={`mode-toggle-btn ${wallet.isDemoMode ? 'sandbox-active' : 'live-active'}`}
-          title={wallet.isDemoMode ? "Currently in Demo Sandbox (100 COOK). Click to switch to Live Mode." : "Currently in Live Mode. Click to switch to Demo Sandbox."}
-        >
-          {wallet.isDemoMode ? (
-            <>
-              <span className="mode-badge-dot sandbox"></span>
-              <span>🧪 Demo Sandbox</span>
-            </>
-          ) : (
-            <>
-              <span className="mode-badge-dot live"></span>
-              <span>🟢 Live Network</span>
-            </>
-          )}
-        </button>
+          <button
+            type="button"
+            onClick={() => wallet.setDemoMode(!wallet.isDemoMode)}
+            className={`mode-toggle-btn ${wallet.isDemoMode ? 'sandbox-active' : 'live-active'}`}
+            title={wallet.isDemoMode ? "In Demo Sandbox (100 COOK). Click to switch to Live Mode." : "In Live Mode. Click to switch to Demo Sandbox."}
+          >
+            {wallet.isDemoMode ? (
+              <>
+                <Sparkles size={13} color="var(--cookie-gold)" />
+                <span>Sandbox (100 COOK)</span>
+              </>
+            ) : (
+              <>
+                <span className="mode-badge-dot live"></span>
+                <span>Live Mode</span>
+              </>
+            )}
+          </button>
+        </div>
 
         <button
           type="button"
@@ -78,21 +78,22 @@ export const Navbar: React.FC<NavbarProps> = ({ wallet, onOpenQuickstart }) => {
       {/* Wallet Actions */}
       <div className="nav-actions">
         {wallet.connected && wallet.address ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <div className="wallet-connected-capsule">
             <div
-              className={`wallet-balance-pill ${wallet.isDemoMode ? 'sandbox-pill' : ''}`}
+              className={`capsule-balance ${wallet.isDemoMode ? 'sandbox-bal' : ''}`}
               title={wallet.isDemoMode ? "Demo Sandbox Balance (deducts on tips & fortunes)" : "Live on-chain COOK balance"}
             >
-              <span>{wallet.balanceCook.toFixed(4)} COOK</span>
-              {wallet.isDemoMode && <span className="demo-tag">Sandbox</span>}
+              <span className="balance-val">{wallet.balanceCook.toFixed(2)}</span>
+              <span className="balance-unit">COOK</span>
+              {wallet.isDemoMode && <span className="capsule-demo-tag">Demo</span>}
             </div>
-            
+
             <button
               onClick={handleCopy}
-              className="btn-wallet connected"
+              className="capsule-address-btn"
               title="Click to copy address"
             >
-              {copied ? <Check size={16} color="var(--neon-emerald)" /> : <Copy size={16} />}
+              {copied ? <Check size={13} color="var(--neon-emerald)" /> : <Copy size={13} />}
               <span>{truncateAddress(wallet.address)}</span>
             </button>
 
@@ -100,19 +101,18 @@ export const Navbar: React.FC<NavbarProps> = ({ wallet, onOpenQuickstart }) => {
               href={getExplorerAccountUrl(wallet.address)}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-secondary"
-              style={{ padding: '0.55rem' }}
+              className="capsule-action-btn"
               title="View on Cookiescan"
             >
-              <ExternalLink size={15} />
+              <ExternalLink size={13} />
             </a>
 
             <button
               onClick={wallet.disconnect}
-              className="btn-secondary"
-              style={{ padding: '0.55rem 0.85rem', fontSize: '0.8rem' }}
+              className="capsule-action-btn disconnect"
+              title="Disconnect Wallet"
             >
-              Disconnect
+              <LogOut size={13} />
             </button>
           </div>
         ) : (
@@ -122,7 +122,7 @@ export const Navbar: React.FC<NavbarProps> = ({ wallet, onOpenQuickstart }) => {
             className="btn-wallet"
             id="connect-nightly-btn"
           >
-            <Wallet size={18} />
+            <Wallet size={16} />
             <span>
               {wallet.connecting ? 'Connecting...' : 'Connect Nightly'}
             </span>

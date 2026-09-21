@@ -87,9 +87,6 @@ export const App: React.FC = () => {
 
         {/* Live Network Radar Bar */}
         <NetworkStatsRadar />
-
-        {/* Cookie DAS API & Ecosystem Status */}
-        <DasAssetInspector wallet={wallet} />
       </section>
 
       {/* Navigation Tabs */}
@@ -168,6 +165,9 @@ export const App: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Cookie DAS API & Ecosystem Inspector */}
+      <DasAssetInspector wallet={wallet} />
 
       {/* Recent On-Chain Transactions */}
       <RecentTransactions transactions={transactions} />
